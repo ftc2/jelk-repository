@@ -2,7 +2,7 @@
 Decide whether a change can alter the repository add-on Kodi's checker validates.
 
 The checker validates only `repository.jelk`. It also downloads ten official Kodi
-indexes from third-party mirrors, which can be slow, rate-limited or down (see
+indexes from third-party mirrors, which can be slow, rate-limited, or down (see
 `tools/kodi_checker.py`). Package imports never change the repository add-on, so
 a publish should not wait on those mirrors; a change to the repository add-on or
 its tooling still has to pass the checker before it deploys.

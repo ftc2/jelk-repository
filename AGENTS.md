@@ -28,6 +28,7 @@
   indexes straight from community mirrors instead of the rate-limited
   `mirrors.kodi.tv` redirector, which otherwise stalls the checker for minutes and
   fails it with a misleading `AttributeError`.
-- `site/` is generated, ignored, and is the only directory deployed to Pages.
+- `site/` is generated and ignored, and it is the only directory deployed to
+  Pages.
 - Base URL: `https://jelk.ing/`. Keep repository metadata,
   links, and documentation consistent with it.

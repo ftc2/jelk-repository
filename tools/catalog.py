@@ -80,7 +80,7 @@ def safe_path(value: str, context: str = 'archive path') -> PurePosixPath:
 
 def read_manifest(data: bytes) -> ET.Element:
   if b'<!DOCTYPE' in data.upper() or b'<!ENTITY' in data.upper():
-    raise CatalogError('XML document types and entity declarations are not allowed')
+    raise CatalogError('XML document types and entity declarations are not allowed.')
   try:
     # Document types and entities are rejected above, before parsing package metadata.
     manifest = ET.fromstring(data)  # noqa: S314
@@ -88,7 +88,7 @@ def read_manifest(data: bytes) -> ET.Element:
     message = f'Invalid addon.xml: {error}'
     raise CatalogError(message) from error
   if manifest.tag != 'addon':
-    raise CatalogError('addon.xml must have an <addon> root')
+    raise CatalogError('addon.xml must have an <addon> root.')
   addon_id = manifest.get('id', '')
   version = manifest.get('version', '')
   validate_id(addon_id)
@@ -123,7 +123,7 @@ class Package:
           len(members) > MAX_MEMBERS
           or sum(item.file_size for item in members) > MAX_UNCOMPRESSED_SIZE
         ):
-          raise CatalogError('Package exceeds the archive size limit')
+          raise CatalogError('Package exceeds the archive size limit.')
         seen = set()
         roots = set()
         files = set()
@@ -150,37 +150,37 @@ class Package:
             message = f'Archive file type disagrees with its path: {name}'
             raise CatalogError(message)
           if item.flag_bits & 1:
-            raise CatalogError('Encrypted archives are not supported')
+            raise CatalogError('Encrypted archives are not supported.')
           roots.add(path.parts[0])
           if item.is_dir():
             directories.add(folded)
           else:
             if len(path.parts) == 1:
-              raise CatalogError('Package files must be inside one add-on root directory')
+              raise CatalogError('Package files must be inside one add-on root directory.')
             files.add(folded)
             self.files[name] = archive.read(item)
           for parent in path.parents:
             if str(parent) != '.':
               directories.add(str(parent).casefold())
         if files & directories:
-          raise CatalogError('An archive path is both a file and a directory')
+          raise CatalogError('An archive path is both a file and a directory.')
         if len(roots) != 1:
-          raise CatalogError('Package must contain exactly one add-on root directory')
+          raise CatalogError('Package must contain exactly one add-on root directory.')
         root = next(iter(roots))
         manifest_data = self.files.get(root + '/addon.xml')
         if manifest_data is None:
-          raise CatalogError('Package has no addon.xml at its root')
+          raise CatalogError('Package has no addon.xml at its root.')
         self.manifest = read_manifest(manifest_data)
         self.addon_id = self.manifest.attrib['id']
         self.version = self.manifest.attrib['version']
         if root != self.addon_id:
-          raise CatalogError('Archive root does not match addon.xml ID')
+          raise CatalogError('Archive root does not match addon.xml ID.')
         if expected_id is not None and self.addon_id != expected_id:
-          message = f'Package ID {self.addon_id} does not match expected ID {expected_id}'
+          message = f'Package ID {self.addon_id} does not match expected ID {expected_id}.'
           raise CatalogError(message)
         if expected_version is not None and self.version != expected_version:
           message = (
-            f'Package version {self.version} does not match expected version {expected_version}'
+            f'Package version {self.version} does not match expected version {expected_version}.'
           )
           raise CatalogError(message)
         self.assets: dict[str, bytes] = {}
@@ -223,14 +223,14 @@ def import_package(zip_path: Path, addon_id: str, version: str, root: Path = ROO
   validate_id(addon_id)
   version_key(version)
   if addon_id not in PACKAGE_IDS:
-    raise CatalogError('Only script.jelk and skin.jelk may be imported')
+    raise CatalogError('Only script.jelk and skin.jelk may be imported.')
   package = Package(Path(zip_path).read_bytes(), addon_id, version)
   directory = root / 'packages' / addon_id
   require_local_directory(directory, root)
   directory.mkdir(parents=True, exist_ok=True)
   target = directory / package.filename
   if target.is_symlink():
-    raise CatalogError('Package destination must not be a symlink')
+    raise CatalogError('Package destination must not be a symlink.')
   try:
     with target.open('xb') as stream:
       stream.write(package.data)
@@ -245,7 +245,7 @@ def repository_package(root: Path) -> Package:
   directory = root / REPOSITORY_ID
   require_local_directory(directory, root)
   if not directory.is_dir():
-    raise CatalogError('Missing repository.jelk/ source directory')
+    raise CatalogError('Missing repository.jelk/ source directory.')
   output = io.BytesIO()
   with zipfile.ZipFile(output, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
     for source in sorted(directory.rglob('*')):
@@ -274,7 +274,7 @@ def load_packages(root: Path) -> list[Package]:
       raise CatalogError(message)
     package = Package(source.read_bytes(), expected_id=source.parent.name)
     if package.addon_id not in PACKAGE_IDS:
-      raise CatalogError('Only script.jelk and skin.jelk may be imported')
+      raise CatalogError('Only script.jelk and skin.jelk may be imported.')
     if source.name != package.filename:
       message = f'Package filename disagrees with addon.xml: {source.name}'
       raise CatalogError(message)
@@ -391,7 +391,7 @@ def check_repository_urls(manifest: ET.Element, output: Path) -> None:
   """Require repository URLs to resolve to generated files outside the browsed root."""
   directory = manifest.find("extension[@point='xbmc.addon.repository']/dir")
   if directory is None:
-    raise CatalogError('Repository manifest lacks an xbmc.addon.repository <dir>')
+    raise CatalogError('Repository manifest lacks an xbmc.addon.repository <dir>.')
   for tag in ('info', 'checksum', 'datadir'):
     url = (directory.findtext(tag) or '').strip()
     if not url.startswith(BASE_URL):

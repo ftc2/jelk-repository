@@ -5,9 +5,9 @@ kodi-addon-checker downloads ten official Kodi repository indexes from
 `http://mirrors.kodi.tv/addons/{branch}/addons.xml.gz`. That host only redirects
 each request to a random community mirror, and it rate-limits: after about six
 requests in a few seconds it answers 429 without `Retry-After`. The checker
-retries each 429 up to five times, sleeping 0, 20, 40, 80 and 120 s, so an
+retries each 429 up to five times, sleeping 0, 20, 40, 80, and 120 s, so an
 ordinary run spends most of a minute asleep. When a request is refused six times
-in a row it gives up, swallows the error and returns without setting `addons`, so
+in a row it gives up, swallows the error, and returns without setting `addons`, so
 the run later fails with an unrelated
 `AttributeError: 'Repository' object has no attribute 'addons'`.
 
