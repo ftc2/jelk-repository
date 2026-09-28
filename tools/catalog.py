@@ -343,7 +343,7 @@ footer { margin-top: 32px; }
 {package_links}
 </ul>
 </main>
-<footer>Selected upstream releases · No GitHub sign-in required</footer>
+<footer>got jelk?</footer>
 <script>
 // Copy the source address on click or keyboard activation; selection remains the fallback.
 document.querySelectorAll('[data-copy]').forEach(function (block) {
