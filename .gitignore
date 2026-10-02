@@ -1,10 +1,34 @@
-site/
-.venv/
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.ruff_cache/
+# Operating-system metadata
 .DS_Store
+._*
+.Spotlight-V100/
+.Trashes/
 Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+.directory
+.Trash-*/
+
+# Local editor settings and temporary files
+.idea/
+.vscode/*
+!.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# Local configuration and secrets
 .env
 .env.*
+!.env.example
+
+# Python environment and generated files
+/.venv/
+__pycache__/
+*.py[oc]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Generated distribution site; approved ZIPs under packages/ stay tracked
+/site/
